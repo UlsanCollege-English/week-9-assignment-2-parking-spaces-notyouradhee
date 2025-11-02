@@ -8,7 +8,7 @@ Behavior:
   so that no car waits. If a car leaves at time t and another arrives at time t,
   the same spot can be reused.
 """
-
+import heapq
 def min_parking_spots(intervals):
     # TODO Steps:
     # 1) Understand: we need peak overlap count.
@@ -19,4 +19,21 @@ def min_parking_spots(intervals):
     # 6) Write code.
     # 7) Debug with small examples.
     # 8) Confirm O(n log n).
-    raise NotImplementedError
+    if not intervals:
+        return 0
+
+    intervals.sort()
+
+    end_time_heap = []
+    max_spots = 0
+
+    for (start, end) in intervals:
+        
+        while end_time_heap and end_time_heap[0] <= start:
+            heapq.heappop(end_time_heap)
+
+        heapq.heappush(end_time_heap, end)
+
+        max_spots = max(max_spots, len(end_time_heap))
+
+    return max_spots
